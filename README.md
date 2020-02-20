@@ -1,6 +1,6 @@
 `kms` is an utility tool to encrypt and decrypt content using AWS KMS service.
 
-![build](https://github.com/rochacon/kms/workflows/build/badge.svg)
+[![build](https://github.com/rochacon/kms/workflows/build/badge.svg)](https://github.com/rochacon/kms/actions?query=workflow%3Abuild)
 
 ### Usage
 
