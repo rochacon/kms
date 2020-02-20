@@ -13,6 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/kms"
 )
 
+var VERSION = "dev"
+
 func main() {
 	flag.Parse()
 	if flag.NArg() < 1 {
@@ -25,6 +27,8 @@ func main() {
 	case "encrypt":
 		keyId := flag.Arg(1)
 		err = encrypt(keyId, os.Stdin, os.Stdout)
+	case "version":
+		fmt.Printf("kms %s\n", VERSION)
 	default:
 		usage()
 	}
@@ -40,6 +44,7 @@ func usage() {
 	fmt.Fprintf(os.Stderr, "  kms decrypt < encrypted.kms > plaintext\n")
 	fmt.Fprintf(os.Stderr, "  kms encrypt alias/some-key-alias < plaintext > encrypted.kms\n")
 	fmt.Fprintf(os.Stderr, "  kms encrypt 01234567-8901-2345-6789-012345678901 < plaintext > encrypted.kms\n")
+	fmt.Fprintf(os.Stderr, "  kms version\n")
 	os.Exit(1)
 }
 
