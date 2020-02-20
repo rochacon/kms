@@ -22,9 +22,9 @@ func main() {
 	}
 	var err error
 	switch flag.Arg(0) {
-	case "decrypt":
+	case "d", "dec", "decrypt":
 		err = decrypt(os.Stdin, os.Stdout)
-	case "encrypt":
+	case "e", "env", "encrypt":
 		keyId := flag.Arg(1)
 		err = encrypt(keyId, os.Stdin, os.Stdout)
 	case "version":
