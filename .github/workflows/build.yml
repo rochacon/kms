@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: build and sha binary
       run: |
-        GOOS=freebsd go build -v -ldflags "-X main.VERSION=$(git describe --abbrev --always --dirty)" -o kms-freebsd-amd64
+        GOOS=freebsd go build -v -ldflags "-X main.VERSION=$(git describe --abbrev --always --dirty --tags)" -o kms-freebsd-amd64
         sha256sum kms-* > kms-freebsd-amd64.sha256sum
     - name: artifact kms-freebsd-amd64
       uses: actions/upload-artifact@v1.0.0
@@ -35,7 +35,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: build and sha binary
       run: |
-        GOOS=darwin go build -v -ldflags "-X main.VERSION=$(git describe --abbrev --always --dirty)" -o kms-darwin-amd64
+        GOOS=darwin go build -v -ldflags "-X main.VERSION=$(git describe --abbrev --always --dirty --tags)" -o kms-darwin-amd64
         sha256sum kms-* > kms-darwin-amd64.sha256sum
     - name: artifact kms-darwin-amd64
       uses: actions/upload-artifact@v1.0.0
@@ -58,7 +58,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: build and sha binary
       run: |
-        GOOS=linux go build -v -ldflags "-X main.VERSION=$(git describe --abbrev --always --dirty)" -o kms-linux-amd64
+        GOOS=linux go build -v -ldflags "-X main.VERSION=$(git describe --abbrev --always --dirty --tags)" -o kms-linux-amd64
         sha256sum kms-* > kms-linux-amd64.sha256sum
     - name: artifact kms-linux-amd64
       uses: actions/upload-artifact@v1.0.0
@@ -81,7 +81,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: build and sha binary
       run: |
-        GOOS=windows go build -v -ldflags "-X main.VERSION=$(git describe --abbrev --always --dirty)" -o kms-windows-amd64.exe
+        GOOS=windows go build -v -ldflags "-X main.VERSION=$(git describe --abbrev --always --dirty --tags)" -o kms-windows-amd64.exe
         sha256sum kms-* > kms-windows-amd64.exe.sha256sum
     - name: artifact kms-windows-amd64.exe
       uses: actions/upload-artifact@v1.0.0
