@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"flag"
 	"fmt"
 	"io"
@@ -16,17 +17,26 @@ import (
 var VERSION = "dev"
 
 func main() {
+	useBase64 := flag.Bool("base64", false, "decode input or encode output with base64")
 	flag.Parse()
 	if flag.NArg() < 1 {
 		usage()
 	}
 	var err error
+	var stdin io.Reader = os.Stdin
+	var stdout io.Writer = os.Stdout
 	switch flag.Arg(0) {
 	case "d", "dec", "decrypt":
-		err = decrypt(os.Stdin, os.Stdout)
+		if *useBase64 {
+			stdin = base64.NewDecoder(base64.StdEncoding, stdin)
+		}
+		err = decrypt(stdin, stdout)
 	case "e", "env", "encrypt":
+		if *useBase64 {
+			stdout = base64.NewEncoder(base64.StdEncoding, stdout)
+		}
 		keyId := flag.Arg(1)
-		err = encrypt(keyId, os.Stdin, os.Stdout)
+		err = encrypt(keyId, stdin, stdout)
 	case "version":
 		fmt.Printf("kms %s\n", VERSION)
 	default:
