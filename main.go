@@ -31,7 +31,7 @@ func main() {
 			stdin = base64.NewDecoder(base64.StdEncoding, stdin)
 		}
 		err = decrypt(stdin, stdout)
-	case "e", "env", "encrypt":
+	case "e", "enc", "encrypt":
 		if *useBase64 {
 			stdout = base64.NewEncoder(base64.StdEncoding, stdout)
 		}
