@@ -24,7 +24,7 @@ func main() {
 	}
 	var err error
 	var stdin io.Reader = os.Stdin
-	var stdout io.Writer = os.Stdout
+	var stdout io.WriteCloser = os.Stdout
 	switch flag.Arg(0) {
 	case "d", "dec", "decrypt":
 		if *useBase64 {
@@ -40,6 +40,9 @@ func main() {
 			log.Fatalf("key id/alias is required")
 		}
 		err = encrypt(keyId, stdin, stdout)
+		if *useBase64 {
+			stdout.Close()
+		}
 	case "version":
 		fmt.Printf("kms %s\n", VERSION)
 	default:
