@@ -17,7 +17,9 @@ import (
 var VERSION = "dev"
 
 func main() {
-	useBase64 := flag.Bool("base64", false, "decode input or encode output with base64")
+	var useBase64 bool
+	flag.BoolVar(&useBase64, "b64", false, "decode input or encode output with base64")
+	flag.BoolVar(&useBase64, "base64", false, "decode input or encode output with base64")
 	flag.Parse()
 	if flag.NArg() < 1 {
 		usage()
@@ -27,12 +29,12 @@ func main() {
 	var stdout io.WriteCloser = os.Stdout
 	switch flag.Arg(0) {
 	case "d", "dec", "decrypt":
-		if *useBase64 {
+		if useBase64 {
 			stdin = base64.NewDecoder(base64.StdEncoding, stdin)
 		}
 		err = decrypt(stdin, stdout)
 	case "e", "enc", "encrypt":
-		if *useBase64 {
+		if useBase64 {
 			stdout = base64.NewEncoder(base64.StdEncoding, stdout)
 		}
 		keyId := flag.Arg(1)
@@ -40,7 +42,7 @@ func main() {
 			log.Fatalf("key id/alias is required")
 		}
 		err = encrypt(keyId, stdin, stdout)
-		if *useBase64 {
+		if useBase64 {
 			stdout.Close()
 		}
 	case "version":
