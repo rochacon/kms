@@ -36,6 +36,9 @@ func main() {
 			stdout = base64.NewEncoder(base64.StdEncoding, stdout)
 		}
 		keyId := flag.Arg(1)
+		if keyId == "" {
+			log.Fatalf("key id/alias is required")
+		}
 		err = encrypt(keyId, stdin, stdout)
 	case "version":
 		fmt.Printf("kms %s\n", VERSION)
