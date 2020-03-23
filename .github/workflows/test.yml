@@ -1,0 +1,33 @@
+name: build
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: "1.14"
+    - uses: actions/checkout@v1
+    - name: go fmt
+      run: test -z $(go fmt ./...)
+    - name: go test
+      run: go test -v ./...
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: "1.14"
+    - uses: actions/checkout@v1
+    - name: go build and sha256
+      run: |
+        export CGO_ENABLED=0
+        VERSION="$(git describe --abbrev --always --dirty --tags)"
+        for GOOS in darwin freebsd linux windows; do
+          GOOS=$GOOS go build -v -ldflags "-X main.VERSION=${VERSION}" -o kms-$GOOS-amd64
+          sha256sum kms-$GOOS-amd64 > kms-$GOOS-amd64.sha256sum
+        done

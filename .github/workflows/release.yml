@@ -1,0 +1,105 @@
+name: release
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: "1.14"
+    - uses: actions/checkout@v1
+    - name: go build and sha256
+      run: |
+        export CGO_ENABLED=0
+        VERSION="$(git describe --abbrev --always --dirty --tags)"
+        for GOOS in darwin freebsd linux windows; do
+          GOOS=$GOOS go build -v -ldflags "-X main.VERSION=${VERSION}" -o kms-$GOOS-amd64
+          sha256sum kms-$GOOS-amd64 > kms-$GOOS-amd64.sha256sum
+        done
+    - name: create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    - name: upload darwin binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kms-darwin-amd64
+        asset_name: kms-darwin-amd64
+        asset_content_type: application/x-executable
+    - name: upload darwin sha256sum
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kms-darwin-amd64.sha256sum
+        asset_name: kms-darwin-amd64.sha256sum
+        asset_content_type: text/plain
+    - name: upload freebsd binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kms-freebsd-amd64
+        asset_name: kms-freebsd-amd64
+        asset_content_type: application/x-executable
+    - name: upload freebsd sha256sum
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kms-freebsd-amd64.sha256sum
+        asset_name: kms-freebsd-amd64.sha256sum
+        asset_content_type: text/plain
+    - name: upload linux binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kms-linux-amd64
+        asset_name: kms-linux-amd64
+        asset_content_type: application/x-executable
+    - name: upload linux sha256sum
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kms-linux-amd64.sha256sum
+        asset_name: kms-linux-amd64.sha256sum
+        asset_content_type: text/plain
+    - name: upload windows binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kms-windows-amd64
+        asset_name: kms-windows-amd64.exe
+        asset_content_type: application/x-executable
+    - name: upload windows sha256sum
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kms-windows-amd64.sha256sum
+        asset_name: kms-windows-amd64.exe.sha256sum
+        asset_content_type: text/plain
