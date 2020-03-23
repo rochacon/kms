@@ -27,7 +27,8 @@ jobs:
       run: |
         export CGO_ENABLED=0
         VERSION="$(git describe --abbrev --always --dirty --tags)"
-        for GOOS in darwin freebsd linux windows; do
+        for GOOS in darwin freebsd linux windows ; do
           GOOS=$GOOS go build -v -ldflags "-X main.VERSION=${VERSION}" -o kms-$GOOS-amd64
           sha256sum kms-$GOOS-amd64 > kms-$GOOS-amd64.sha256sum
+          cat kms-$GOOS-amd64.sha256sum | sha256sum -c -
         done
