@@ -62,6 +62,7 @@ func usage() {
 	fmt.Fprintf(os.Stderr, "  kms decrypt < encrypted.kms > plaintext\n")
 	fmt.Fprintf(os.Stderr, "  kms encrypt alias/some-key-alias < plaintext > encrypted.kms\n")
 	fmt.Fprintf(os.Stderr, "  kms encrypt 01234567-8901-2345-6789-012345678901 < plaintext > encrypted.kms\n")
+	fmt.Fprintf(os.Stderr, "  kms -base64=false encrypt 01234567-8901-2345-6789-012345678901 < plaintext > encrypted.kms # output is raw KMS binary blob\n")
 	fmt.Fprintf(os.Stderr, "  kms version\n")
 	os.Exit(1)
 }
