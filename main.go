@@ -18,8 +18,8 @@ var VERSION = "dev"
 
 func main() {
 	var useBase64 bool
-	flag.BoolVar(&useBase64, "b64", false, "decode input or encode output with base64")
-	flag.BoolVar(&useBase64, "base64", false, "decode input or encode output with base64")
+	flag.BoolVar(&useBase64, "b64", true, "decode input or encode output with base64")
+	flag.BoolVar(&useBase64, "base64", true, "decode input or encode output with base64")
 	flag.Parse()
 	if flag.NArg() < 1 {
 		usage()
