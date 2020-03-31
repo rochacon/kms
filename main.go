@@ -20,9 +20,10 @@ func main() {
 	var useBase64 bool
 	flag.BoolVar(&useBase64, "b64", true, "decode input or encode output with base64")
 	flag.BoolVar(&useBase64, "base64", true, "decode input or encode output with base64")
+	flag.Usage = usage
 	flag.Parse()
 	if flag.NArg() < 1 {
-		usage()
+		flag.Usage()
 	}
 	var err error
 	var stdin io.Reader = os.Stdin
@@ -58,7 +59,13 @@ func main() {
 func usage() {
 	fmt.Fprintf(os.Stderr, "kms is an utility tool to encrypt and decrypt content using AWS KMS service.\n\n")
 	fmt.Fprintf(os.Stderr, "All data must be provided via stdin, stdout will be used for the content and stderr for info\n\n")
-	fmt.Fprintf(os.Stderr, "Usage:\n")
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "Usage: kms <decrypt|encrypt> < input.file > output.file\n")
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "Flags:\n")
+	flag.PrintDefaults()
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "Examples:\n")
 	fmt.Fprintf(os.Stderr, "  kms decrypt < encrypted.kms > plaintext\n")
 	fmt.Fprintf(os.Stderr, "  kms encrypt alias/some-key-alias < plaintext > encrypted.kms\n")
 	fmt.Fprintf(os.Stderr, "  kms encrypt 01234567-8901-2345-6789-012345678901 < plaintext > encrypted.kms\n")
