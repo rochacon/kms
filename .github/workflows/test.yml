@@ -14,10 +14,12 @@ jobs:
       run: test -z $(go fmt ./...)
     - name: go test
       run: go test -v ./...
+    - name: staticcheck install
+      run: go install honnef.co/go/tools/cmd/staticcheck@latest
     - name: staticcheck version
-      run: go run honnef.co/go/tools/cmd/staticcheck -version
+      run: go run honnef.co/go/tools/cmd/staticcheck@latest -version
     - name: staticcheck
-      run: go run honnef.co/go/tools/cmd/staticcheck -- ./...
+      run: go run honnef.co/go/tools/cmd/staticcheck@latest -- ./...
 
   build:
     runs-on: ubuntu-latest
